@@ -17,6 +17,7 @@ import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
@@ -38,6 +39,9 @@ public class AgentStateService {
     static final String REASON_EMERGENCY = "Emergency stop engaged on Launchpad";
 
     private static final int CHARS_PER_TOKEN = 4;
+
+    /** Number of subagent strips (rows 3-6) on the Launchpad. */
+    public static final int SUBAGENT_STRIPS = SessionState.STRIPS;
 
     @Inject
     LaunchpadConfig config;
@@ -88,17 +92,21 @@ public class AgentStateService {
                 .map(decision -> decide(pending.event(), decision));
     }
 
-    /** Resolves the oldest pending approval. Returns {@code false} if there is none. */
+    /** Resolves the oldest pending approval (across all sessions). Returns {@code false} if there is none. */
     public boolean resolve(ApprovalDecision decision) {
-        PendingApproval pending;
-        synchronized (this) {
-            pending = approvals.pollFirst();
+        while (true) {
+            PendingApproval pending;
+            synchronized (this) {
+                pending = approvals.pollFirst();
+            }
+            if (pending == null) {
+                return false;
+            }
+            // skip approvals that timed out concurrently, so the press is applied to a waiting one
+            if (pending.decision().complete(decision)) {
+                return true;
+            }
         }
-        if (pending == null) {
-            return false;
-        }
-        pending.decision().complete(decision);
-        return true;
     }
 
     /** Cancels the subagent shown in the given strip (0..3) of the focused session. */
@@ -299,9 +307,18 @@ public class AgentStateService {
         return null;
     }
 
-    private synchronized ApprovalDecision expire(PendingApproval pending) {
-        approvals.remove(pending);
-        return ApprovalDecision.TIMEOUT;
+    private ApprovalDecision expire(PendingApproval pending) {
+        synchronized (this) {
+            approvals.remove(pending);
+        }
+        // a concurrent pad press may have won the race, its decision takes precedence. Mutiny cancels the
+        // future on timeout, in that case a later press is applied to the next pending approval
+        pending.decision().complete(ApprovalDecision.TIMEOUT);
+        try {
+            return pending.decision().join();
+        } catch (CancellationException e) {
+            return ApprovalDecision.TIMEOUT;
+        }
     }
 
     private synchronized HookOutcome decide(HookEvent event, ApprovalDecision decision) {

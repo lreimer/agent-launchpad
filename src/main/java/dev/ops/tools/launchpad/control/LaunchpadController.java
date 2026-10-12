@@ -42,7 +42,7 @@ public class LaunchpadController {
             }
             case SIDE -> {
                 int strip = press.row() - LaunchpadRenderer.FIRST_STRIP_ROW;
-                if (strip >= 0 && strip < 4) {
+                if (strip >= 0 && strip < AgentStateService.SUBAGENT_STRIPS) {
                     state.cancelSubagent(strip);
                 }
             }

@@ -66,10 +66,10 @@ yellow and amber respectively.
 
 | Button | Action |
 |---|---|
-| Pad (1,1) | Allow the oldest pending tool call (`permissionDecision: allow`) |
+| Pad (1,1) | Allow the oldest pending tool call of all sessions (`permissionDecision: allow`) |
 | Pad (1,2) | Block the oldest pending tool call (`permissionDecision: deny`) |
 | Pad (1,3) | Allow and auto-approve this tool for the rest of the session |
-| Side buttons rows 3-6 | Cancel the subagent of that strip: its further tool calls are denied |
+| Side buttons rows 3-6 | Cancel the subagent of that strip: its further tool calls are denied (only the first 4 running subagents get a strip) |
 | Top 1 (CC 104) | Emergency stop toggle: denies all pending and further tool calls and answers hooks with `continue: false`; optionally runs `launchpad.actions.emergency-stop-command` |
 | Top 5 (CC 108) | Session indicator (lit while a session is active) |
 | Top 8 (CC 111) | Manual compaction request; optionally runs `launchpad.actions.compact-command` |
