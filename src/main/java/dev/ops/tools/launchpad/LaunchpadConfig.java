@@ -59,8 +59,8 @@ public interface LaunchpadConfig {
 
     interface Render {
         /** Interval of the LED render loop, drives the chasing and ripple animations. */
-        @WithDefault("0.125s")
-        String interval();
+        @WithDefault("125ms")
+        Duration interval();
     }
 
     interface Actions {
