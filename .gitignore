@@ -28,3 +28,7 @@ gradle-app.setting
 
 # Quarkus
 .quarkus/
+
+# Python
+__pycache__/
+*.pyc
