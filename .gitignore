@@ -19,3 +19,12 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# IDEs and OS files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Quarkus
+.quarkus/
