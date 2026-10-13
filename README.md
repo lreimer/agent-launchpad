@@ -119,7 +119,15 @@ Add the plugin from [integrations/adk/launchpad_plugin.py](integrations/adk/laun
 runner = InMemoryRunner(agent=root_agent, plugins=[LaunchpadPlugin()])
 ```
 
-It posts to `/api/v1/hooks/adk` and returns an error result for tool calls that are blocked on the Launchpad.
+For ADK Java, add [integrations/adk/LaunchpadPlugin.java](integrations/adk/LaunchpadPlugin.java)
+(requires `com.google.adk:google-adk` 1.x and Java 17+) to your runner:
+
+```java
+InMemoryRunner runner = new InMemoryRunner(rootAgent, "my-app", List.of(new LaunchpadPlugin()));
+```
+
+Both plugins post to `/api/v1/hooks/adk` (override with `AGENT_LAUNCHPAD_URL`) and return an error result for
+tool calls that are blocked on the Launchpad.
 
 ## REST API
 
