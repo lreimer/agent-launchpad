@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/sessionStart -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ],
+    "userPromptSubmitted": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/userPromptSubmitted -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 300 -X POST http://localhost:8080/api/v1/hooks/copilot/preToolUse -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 305
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/postToolUse -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ],
+    "postToolUseFailure": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/postToolUseFailure -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ],
+    "subagentStart": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/subagentStart -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ],
+    "subagentStop": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/subagentStop -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ],
+    "preCompact": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/preCompact -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ],
+    "agentStop": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/agentStop -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ],
+    "errorOccurred": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/errorOccurred -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "curl -s --max-time 10 -X POST http://localhost:8080/api/v1/hooks/copilot/sessionEnd -H 'Content-Type: application/json' --data-binary @- || echo '{}'",
+        "timeoutSec": 15
+      }
+    ]
+  }
+}
